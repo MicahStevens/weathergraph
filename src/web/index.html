@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Historical Weather Data Analyzer</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.plot.ly/plotly-2.25.2.min.js"></script>
+    <script src="/eel.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🌤️ Historical Weather Data Analyzer</h1>
+            <p>Explore decades of weather patterns for any US location</p>
+        </header>
+
+        <div class="input-panel">
+            <div class="form-group">
+                <label for="zipCode">ZIP Code:</label>
+                <input type="text" id="zipCode" placeholder="Enter ZIP code (e.g., 90210)" maxlength="5" pattern="[0-9]{5}">
+            </div>
+
+            <div class="form-group">
+                 <label for="startMonth">Start Month:</label>
+                 <select id="startMonth">
+                     <option value="1">January</option>
+                     <option value="2">February</option>
+                     <option value="3">March</option>
+                     <option value="4">April</option>
+                     <option value="5">May</option>
+                     <option value="6">June</option>
+                     <option value="7">July</option>
+                     <option value="8" selected>August</option>
+                     <option value="9">September</option>
+                     <option value="10">October</option>
+                     <option value="11">November</option>
+                     <option value="12">December</option>
+                 </select>
+             </div>
+
+             <div class="form-group">
+                 <label for="startDay">Start Day:</label>
+                 <select id="startDay">
+                     <!-- Options will be populated by JavaScript -->
+                 </select>
+             </div>
+
+             <div class="form-group">
+                 <label for="endMonth">End Month:</label>
+                 <select id="endMonth">
+                     <option value="1">January</option>
+                     <option value="2">February</option>
+                     <option value="3">March</option>
+                     <option value="4">April</option>
+                     <option value="5">May</option>
+                     <option value="6">June</option>
+                     <option value="7">July</option>
+                     <option value="8" selected>August</option>
+                     <option value="9">September</option>
+                     <option value="10">October</option>
+                     <option value="11">November</option>
+                     <option value="12">December</option>
+                 </select>
+             </div>
+
+             <div class="form-group">
+                 <label for="endDay">End Day:</label>
+                 <select id="endDay">
+                     <!-- Options will be populated by JavaScript -->
+                 </select>
+             </div>
+
+            <div class="form-group">
+                <label for="startYear">Start Year:</label>
+                <input type="number" id="startYear" min="1940" max="2025" value="1960">
+            </div>
+
+            <div class="form-group">
+                <label for="endYear">End Year:</label>
+                <input type="number" id="endYear" min="1940" max="2025" value="2025">
+            </div>
+
+             <div class="form-group">
+                 <label for="movingAvgWindow">Moving Average Window:</label>
+                 <select id="movingAvgWindow">
+                     <option value="3">3 years</option>
+                     <option value="5" selected>5 years</option>
+                     <option value="7">7 years</option>
+                     <option value="10">10 years</option>
+                     <option value="auto">Auto (based on data range)</option>
+                 </select>
+             </div>
+
+             <button id="fetchData" onclick="fetchWeatherData()">
+                 <span id="buttonText">Fetch Weather Data</span>
+                 <span id="loadingSpinner" class="spinner" style="display: none;">⟳</span>
+             </button>
+         </div>
+
+         <div class="controls-panel">
+             <div class="controls-section">
+                 <h3>Temperature Series</h3>
+                  <div class="checkbox-group">
+                      <label class="checkbox-label">
+                          <input type="checkbox" id="showMax" class="temp-toggle" checked> Max Temperature
+                      </label>
+                      <label class="checkbox-label">
+                          <input type="checkbox" id="showMin" class="temp-toggle" checked> Min Temperature
+                      </label>
+                      <label class="checkbox-label">
+                          <input type="checkbox" id="showAvg" class="temp-toggle" checked> Average Temperature
+                      </label>
+                      <label class="checkbox-label">
+                          <input type="checkbox" id="showMean" class="temp-toggle" checked> Mean Temperature
+                      </label>
+                  </div>
+             </div>
+
+             <div class="controls-section">
+                 <h3>Days Above Threshold</h3>
+                 <div class="form-group threshold-group">
+                     <label for="thresholdTemp">Threshold (°F):</label>
+                     <input type="number" id="thresholdTemp" min="-50" max="150" value="80" step="1">
+                 </div>
+                 <label class="checkbox-label">
+                     <input type="checkbox" id="showThresholdDays" class="temp-toggle"> Show Days Above Threshold
+                 </label>
+             </div>
+         </div>
+
+        <div id="statusMessage" class="status-message"></div>
+
+        <div class="plot-container">
+            <div id="temperaturePlot" class="plot-area"></div>
+        </div>
+
+        <div class="info-panel">
+            <div class="cache-info">
+                <h3>Cache Statistics</h3>
+                <div id="cacheStats"></div>
+                <button onclick="refreshCacheStats()">Refresh Cache Info</button>
+                <button onclick="clearCache()">Clear Cache</button>
+            </div>
+         </div>
+
+         <footer class="data-source-footer">
+             <p>Data source: <a href="https://open-meteo.com/" target="_blank" rel="noopener noreferrer">Open-Meteo API</a> - Free historical weather data</p>
+         </footer>
+     </div>
+
+     <script src="app.js"></script>
+ </body>
+ </html>
